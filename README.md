@@ -1,0 +1,1 @@
+This is the easier version of the trivia homework assignment - featuring setTimeout
