@@ -25,7 +25,7 @@ var quizQuestions = [
 
 var timer = setInterval(function() {
     if (timeLeft !== 0 && quizStarted === true) {
-        $("#quizHeader").text("Backstroke of the West Quiz - Time left: " + timeLeft);
+        $("#quizHeader").html("Backstroke of the West Quiz - Time left: <strong><font color='red'>" + timeLeft + "</font></strong>");
         timeLeft--;
     }
     else if (quizStarted === true) {

@@ -30,8 +30,7 @@ body > * {
     margin: 0 auto;
     background-color: #eee;
     border-bottom: 3px solid black;
-    color: red;
-    text-shadow: 2px 2px black;
+    text-shadow: 2px 2px lightblue;
 }
 
 #quizBody {
