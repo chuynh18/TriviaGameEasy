@@ -174,7 +174,7 @@ var feedbackHTML = "";
 var feedbackToHTML = function() {
     feedbackHTML = "";
     for (var i = 0; i < feedbackArray.length; i++) {
-        feedbackHTML += "<br><b>Question: " + feedbackArray[i].q + "</b><br>Your answer: " + feedbackArray[i].uA + "<br>Correct answer: " + feedbackArray[i].c + "<br>Source: " + "<a href='" + feedbackArray[i].s +"'>" + feedbackArray[i].s + "</a>" + "<br>";
+        feedbackHTML += "<br><b>Question: " + feedbackArray[i].q + "</b><br><span id='u-r-wrong-lol'>Your answer: " + feedbackArray[i].uA + "</span><br><strong id='correctQs'>Correct answer: " + feedbackArray[i].c + "</strong><br><em>Source: " + "<a href='" + feedbackArray[i].s +"'>" + feedbackArray[i].s + "</a></em>" + "<br>";
     }
 };
 
