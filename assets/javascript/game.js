@@ -46,16 +46,6 @@ var stopTimer = function() {
     quizStarted = false;
 };
 
-// reset the state of the quiz - used if the user wants to try again
-var restartQuiz = function() {
-    qRight = 0;
-    qWrong = 0;
-    qUnanswered = 0;
-    timeLeft = timeAllowed;
-    feedbackArray = [];
-    renderWelcome();
-};
-
 var randomNum;
 var generateRandom = function(howMany) {
     randomNum = Math.floor(Math.random()*howMany);
@@ -112,6 +102,7 @@ var renderQuiz = function() {
 
 // this renders the welcome screen before the quiz
 var renderWelcome = function () {
+    timeLeft = timeAllowed + 1;
     $("#quizHeader").text("Backstroke of the West Quiz");
     $("#quizBody").html("<center><button type='button' id='clickToStartQuiz'>Click to begin</button></center>");
     $("#quizFooter").text("The wish power are together with you...");
@@ -130,6 +121,10 @@ var feedbackArray = []; // used for giving player feedback regarding questions t
 // this function should score the quiz (# correct, incorrect, unanswered).  It also stops the timer.
 var scoreQuiz = function() {
     stopTimer();
+    feedbackArray = [];
+    qRight = 0;
+    qWrong = 0;
+    qUnanswered = 0;
     // if nothing's checked, increment qUnanswered
     for (var i = 0; i < quizQuestions.length; i++) {
         if (document.getElementById("q"+i+"O0").checked === false &&
@@ -168,7 +163,7 @@ var scoreQuiz = function() {
     renderScoreScreen();
 };
 
-var feedbackHTML = "";
+var feedbackHTML = ""; // I store the HTML-ified version of quiz feedback here.  It's used by renderScoreScreen()
 
 // this converts the feedback array we built earlier to html that we can dump into #quizBody
 var feedbackToHTML = function() {
@@ -185,6 +180,7 @@ var renderScoreScreen = function() {
     $("#quizHeader").text("Quiz finished!  Your results...");
     $("#quizBody").html("Questions unanswered: <strong>" + qUnanswered + "</strong><br>Questions correct: <strong id='correctQs'>" + qRight + "</strong><br>Questions incorrect: <strong>" + qWrong + "</strong><br>You took <strong>" + timeSpent+"</strong> seconds.<br><center><button type='button' id='clickToRestartQuiz'>Try again?</button></center>" + feedbackHTML);
     $("#quizFooter").html("Should you choose to retake this quiz, the order of questions and multiple choice options <strong>will be randomized</strong>.");
+    // scroll the window to the top so the user can see how well they did in this disaster of a quiz
     window.scrollTo(0,0);
 };
 
@@ -201,7 +197,7 @@ $(document).on("click", "#clickToScoreQuiz", function() {
 
 // user can press this button to restart the quiz - who the heck would want to do that?
 $(document).on("click", "#clickToRestartQuiz", function() {
-    restartQuiz();
+    renderWelcome();
 });
 
 // ---------------------------------------------------------------------------------
