@@ -5,7 +5,7 @@ var qRight = 0;
 var qWrong = 0;
 var qUnanswered = 0;
 var timeAllowed = 120;  // change this to change how much time the player has
-var timeLeft = timeAllowed;
+var timeLeft = timeAllowed + 1;
 
 var quizStarted = false;
 
@@ -23,21 +23,21 @@ var quizQuestions = [
     {q: 'How Speaker D claim to have discovered the location of Space General?', a: [" The knowledge of the dark of the study hopeless, in the fire of water", " He looking am a civilization person", " West", " He beat the intelligence bureau the telephone"], c: 3, s: "https://youtu.be/XziLNeFm1ok?t=2594"},
     {q: "While on Space General's airship, after hearing Speaker D's warning, what did Ratio Tile say to reassure Speaker?", a: [" Don't you ever think to discovers here from I clues", " Like, this time do not calculate in fact", " Can be how like this?  Like this too wide of the mark, like this inequity?", " Mr. speaker, we are for the big"], c: 3, s: "https://youtu.be/XziLNeFm1ok?t=731"}];
 
-var timer = setInterval(function() {
-    if (timeLeft !== 0 && quizStarted === true) {
-        $("#quizHeader").html("Backstroke of the West Quiz - Time left: <strong><font color='red'>" + timeLeft + "</font></strong>");
-        timeLeft--;
-    }
-    else if (quizStarted === true) {
-        $("#quizHeader").text("Out of time!  Your results...");
-        scoreQuiz();
-    };
-}, 1000);
+var timer;
 
 // starts the timer and calls renderQuiz to start the quiz
 var startTimer = function() {
     quizStarted = true;
-    renderQuiz();
+    timer = setInterval(function() {
+        if (timeLeft !== 0 && quizStarted === true) {
+            timeLeft--;
+            $("#quizHeader").html("Backstroke of the West Quiz - Time left: <strong><font color='red'>" + timeLeft + "</font></strong>");
+        }
+        else if (quizStarted === true) {
+            $("#quizHeader").text("Out of time!  Your results...");
+            scoreQuiz();
+        };
+    }, 1000);
 };
 
 // pauses the timer - might be called by other functions
@@ -51,7 +51,7 @@ var restartQuiz = function() {
     qRight = 0;
     qWrong = 0;
     qUnanswered = 0;
-    timeLeft = 120;
+    timeLeft = timeAllowed;
     renderWelcome();
 };
 
@@ -103,15 +103,17 @@ var renderQuiz = function() {
         };
         
         // always cite your sources for the nonbelievers
-        $("#quizBody").append('<em>Source: <a href="'+quizQuestions[i].s+'" target="_blank">'+quizQuestions[i].s+'</a></em><br>')
+        $("#quizBody").append('<em>Source: <a href="'+quizQuestions[i].s+'" target="_blank">'+quizQuestions[i].s+'</a></em><br>');
     };
-    $("#quizBody").append("<br><button type='button' id='clickToScoreQuiz'>Click to score the quiz</button>")
+    $("#quizBody").append("<br><button type='button' id='clickToScoreQuiz'>Click to score the quiz</button>");
+    $("#quizFooter").text("Even since the last time fights with you hereafter, my force has promoted two times.");
 };
 
 // this renders the welcome screen before the quiz
 var renderWelcome = function () {
     $("#quizHeader").text("Backstroke of the West Quiz");
     $("#quizBody").html("<center><button type='button' id='clickToStartQuiz'>Click to begin</button></center>");
+    $("#quizFooter").text("The wish power are together with you...");
 };
 
 // this function should score the quiz (# correct, incorrect, unanswered).  It also stops the timer.
@@ -134,9 +136,6 @@ var scoreQuiz = function() {
             qWrong++;
         };
     };
-    console.log("unanswered: " + qUnanswered);
-    console.log("correct: " + qRight);
-    console.log("incorrect: " + qWrong);
     renderScoreScreen();
 };
 
@@ -144,12 +143,14 @@ var scoreQuiz = function() {
 var renderScoreScreen = function() {
     var timeSpent = timeAllowed - timeLeft;
     $("#quizHeader").text("Quiz finished!  Your results...");
-    $("#quizBody").html("Questions unanswered: <strong>" + qUnanswered + "</strong><br>Questions correct: <strong>" + qRight + "</strong><br>Questions incorrect: <strong>" + qWrong + "</strong><br>You took <strong>" + timeSpent+"</strong> seconds.<br><center><button type='button' id='clickToRestartQuiz'>Try again?</button></center>");
+    $("#quizBody").html("Questions unanswered: <strong>" + qUnanswered + "</strong><br>Questions correct: <strong id='correctQs'>" + qRight + "</strong><br>Questions incorrect: <strong>" + qWrong + "</strong><br>You took <strong>" + timeSpent+"</strong> seconds.<br><center><button type='button' id='clickToRestartQuiz'>Try again?</button></center>");
+    $("#quizFooter").text("Should you choose to retake this quiz, the order of questions and multiple choice options will be randomized.");
 };
 
 // this listens to the button press on the welcome screen to start the quiz
 $(document).on("click", "#clickToStartQuiz", function() {
     startTimer();
+    renderQuiz();
 });
 
 // user can press this button to end the quiz early

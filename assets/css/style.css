@@ -49,10 +49,15 @@ body {
     border-right: 1px dashed black;
     border-bottom: 1px dashed black;
     flex-shrink: 0;
+    text-align: left;
 }
 
 strong {color: red;}
 
 .labelAnswer {
     max-width: 100%;
+}
+
+#correctQs {
+    color: green;
 }
