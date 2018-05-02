@@ -1,8 +1,23 @@
+* { padding: 0; margin: 0; }
+
 html {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     background-color: #eee;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
+
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+body > * {
+    flex-shrink: 0;
+  }
 
 #quizHeader {
     font-size: 36pt;
@@ -15,6 +30,8 @@ html {
     margin: 0 auto;
     background-color: #eee;
     border-bottom: 3px solid black;
+    color: red;
+    text-shadow: 2px 2px black;
 }
 
 #quizBody {
@@ -22,7 +39,18 @@ html {
     margin: auto;
     text-align: left;
     font-size: 18pt;
-    padding: 100px 50px 0;
+    padding: 80px 50px 50px;
     border-left: 1px dashed black;
     border-right: 1px dashed black;
 }
+
+#quizFooter {
+    width: 40%;
+    margin: auto;
+    padding: 80px 50px 50px;
+    border-left: 1px dashed black;
+    border-right: 1px dashed black;
+    flex-grow: 1;
+}
+
+strong {color: red;}
