@@ -1,0 +1,16 @@
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background-color: #eee;
+}
+
+#quizHeader {
+    font-size: 36pt;
+}
+
+#quizBody {
+    width: 40%;
+    margin: auto;
+    text-align: left;
+    font-size: 18pt;
+}
