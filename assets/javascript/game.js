@@ -52,6 +52,7 @@ var restartQuiz = function() {
     qWrong = 0;
     qUnanswered = 0;
     timeLeft = timeAllowed;
+    feedbackArray = [];
     renderWelcome();
 };
 
@@ -116,6 +117,16 @@ var renderWelcome = function () {
     $("#quizFooter").text("The wish power are together with you...");
 };
 
+// this builds the array of objects we'll use to give the user feedback regarding their incorrect quiz answers
+var QuizFeedback = function(question, userAnswer, correctAnswer, source) {
+    this.q = question;
+    this.uA = userAnswer;
+    this.c = correctAnswer;
+    this.s = source;
+};
+
+var feedbackArray = []; // used for giving player feedback regarding questions they got wrong
+
 // this function should score the quiz (# correct, incorrect, unanswered).  It also stops the timer.
 var scoreQuiz = function() {
     stopTimer();
@@ -132,19 +143,49 @@ var scoreQuiz = function() {
             qRight++;
         }
         // else, increment qWrong
+        // this also stores the questions the user got wrong, along with their choice and the actual answer
         else {
             qWrong++;
+            var question = quizQuestions[i].q;
+            var incorrectChoice;
+            var correctChoice = quizQuestions[i].a[quizQuestions[i].c];
+            var source = quizQuestions[i].s;
+            if (document.getElementById("q"+i+"O0").checked === true) {
+                incorrectChoice = quizQuestions[i].a[0];
+            }
+            else if (document.getElementById("q"+i+"O1").checked === true) {
+                incorrectChoice = quizQuestions[i].a[1];
+            }
+            else if (document.getElementById("q"+i+"O2").checked === true) {
+                incorrectChoice = quizQuestions[i].a[2];
+            }
+            else {
+                incorrectChoice = quizQuestions[i].a[3];
+            };
+            feedbackArray.push(new QuizFeedback(question, incorrectChoice, correctChoice, source));
         };
     };
     renderScoreScreen();
 };
 
+var feedbackHTML = "";
+
+// this converts the feedback array we built earlier to html that we can dump into #quizBody
+var feedbackToHTML = function() {
+    feedbackHTML = "";
+    for (var i = 0; i < feedbackArray.length; i++) {
+        feedbackHTML += "<br><b>Question: " + feedbackArray[i].q + "</b><br>Your answer: " + feedbackArray[i].uA + "<br>Correct answer: " + feedbackArray[i].c + "<br>Source: " + "<a href='" + feedbackArray[i].s +"'>" + feedbackArray[i].s + "</a>" + "<br>";
+    }
+};
+
 // this clears away the quiz and renders the score screen
 var renderScoreScreen = function() {
     var timeSpent = timeAllowed - timeLeft;
+    feedbackToHTML();
     $("#quizHeader").text("Quiz finished!  Your results...");
-    $("#quizBody").html("Questions unanswered: <strong>" + qUnanswered + "</strong><br>Questions correct: <strong id='correctQs'>" + qRight + "</strong><br>Questions incorrect: <strong>" + qWrong + "</strong><br>You took <strong>" + timeSpent+"</strong> seconds.<br><center><button type='button' id='clickToRestartQuiz'>Try again?</button></center>");
-    $("#quizFooter").text("Should you choose to retake this quiz, the order of questions and multiple choice options will be randomized.");
+    $("#quizBody").html("Questions unanswered: <strong>" + qUnanswered + "</strong><br>Questions correct: <strong id='correctQs'>" + qRight + "</strong><br>Questions incorrect: <strong>" + qWrong + "</strong><br>You took <strong>" + timeSpent+"</strong> seconds.<br><center><button type='button' id='clickToRestartQuiz'>Try again?</button></center>" + feedbackHTML);
+    $("#quizFooter").html("Should you choose to retake this quiz, the order of questions and multiple choice options <strong>will be randomized</strong>.");
+    window.scrollTo(0,0);
 };
 
 // this listens to the button press on the welcome screen to start the quiz
