@@ -21,7 +21,7 @@ var quizQuestions = [
     {q: 'After Gold became Reaching the West of Reaches, he fought and lost to Ratio Tile.  Why?', a: [" The geography that Ratio Tile stood compared Reaching the West of Reaches superior", " Reaching the West of Reaches underrated Ratio Tile's ability", " Reaching the West of Reaches was blinded by the truth of Pure Hero's Ground", " The dark lord distorted Reaching the West of Reaches's heart"], c: 0, s: "https://youtu.be/XziLNeFm1ok?t=7163"},
     {q: "After Reaching the West of Reaches declared that Ratio Tile underrated his ability, what was Ratio Tile's last warning?", a: [" Let me killing your and is not your new empire?", " Everything ends, the peaceful is willing to", " Is", " Bring the world brilliance.  But is not to bring the blackness"], c: 2, s: "https://youtu.be/XziLNeFm1ok?t=7169"},
     {q: 'How Speaker D claim to have discovered the location of Space General?', a: [" The knowledge of the dark of the study hopeless, in the fire of water", " He looking am a civilization person", " West", " He beat the intelligence bureau the telephone"], c: 3, s: "https://youtu.be/XziLNeFm1ok?t=2594"},
-    {q: "On Space General's airship, after hearing Speaker D's warning, what did Ratio Tile say to reassure Speaker?", a: [" Don't you ever think to discovers here from I clues", " Like, this time do not calculate in fact", " Can be how like this?  Like this too wide of the mark, like this inequity?", " Mr. speaker, we are for the big"], c: 3, s: "https://youtu.be/XziLNeFm1ok?t=731"}];
+    {q: "While on Space General's airship, after hearing Speaker D's warning, what did Ratio Tile say to reassure Speaker?", a: [" Don't you ever think to discovers here from I clues", " Like, this time do not calculate in fact", " Can be how like this?  Like this too wide of the mark, like this inequity?", " Mr. speaker, we are for the big"], c: 3, s: "https://youtu.be/XziLNeFm1ok?t=731"}];
 
 var timer = setInterval(function() {
     if (timeLeft !== 0 && quizStarted === true) {
@@ -55,26 +55,49 @@ var restartQuiz = function() {
     renderWelcome();
 };
 
+var randomNum;
+var generateRandom = function(howMany) {
+    randomNum = Math.floor(Math.random()*howMany);
+};
+
 // this function should take the data contained in this JS file and render the quiz in the html
 var renderQuiz = function() {
+    // clear out the area where the quiz is to be inserted
     $("#quizBody").empty();
+    // this allows us to randomize the order we present the questions in
+    var randomizeArray = [];
     for (var i = 0; i < quizQuestions.length; i++) {
-        // pull data from our array of objects
-        var quizQuestion = quizQuestions[i].q;
-        var quizOptions = quizQuestions[i].a;
+        while (randomizeArray.length < quizQuestions.length) {
+            generateRandom(quizQuestions.length);
+            if (randomizeArray.indexOf(randomNum) === -1) {
+                randomizeArray.push(randomNum);
+            };
+        };
+        // pull data from our array of objects using the array we built
+        var quizQuestion = quizQuestions[randomizeArray[i]].q;
+        var quizOptions = quizQuestions[randomizeArray[i]].a;
         
         // build the html for the question being asked
         var quizBlock = $("<form>");
-        quizBlock.attr("id", "question"+i);
+        quizBlock.attr("id", "question"+randomizeArray[i]);
         quizBlock.addClass("quizQuestion");
         quizBlock.html("<br><strong>" + quizQuestion + "</strong><br>");
         // appending the question
         $("#quizBody").append(quizBlock);
 
+        // allows us to randomize the order we present the options for each question
+        var randomizeArray2 = [];
+            while (randomizeArray2.length < quizOptions.length) {
+                generateRandom(quizOptions.length);
+                if (randomizeArray2.indexOf(randomNum) === -1) {
+                    randomizeArray2.push(randomNum);
+                };
+            };
+
         // build the html for the radio buttons
         for (var j = 0; j < quizOptions.length; j++) {
             // Just wow, what is this... ugly... thing.  There's gotta be a better way.
-            var quizButton = $('<input type="radio" name="'+i+'" id="q'+i+'O'+j+'" value="'+j+'">'+'<label for="q'+i+'O'+j+'">'+quizOptions[j]+'</label>'+'<br>');
+            var quizButton = $('<input type="radio" name="'+randomizeArray[i]+'" id="q'+randomizeArray[i]+'O'+randomizeArray2[j]+'" value="'+randomizeArray2[j]+'">'+'<label class="labelAnswer" for="q'+randomizeArray[i]+'O'+randomizeArray2[j]+'">'+quizOptions[randomizeArray2[j]]+'</label><br>');
             // append the radio button
             $("#quizBody").append(quizButton);
         };
@@ -94,6 +117,7 @@ var renderWelcome = function () {
 // this function should score the quiz (# correct, incorrect, unanswered).  It also stops the timer.
 var scoreQuiz = function() {
     stopTimer();
+    // if nothing's checked, increment qUnanswered
     for (var i = 0; i < quizQuestions.length; i++) {
         if (document.getElementById("q"+i+"O0").checked === false &&
             document.getElementById("q"+i+"O1").checked === false &&
@@ -101,9 +125,11 @@ var scoreQuiz = function() {
             document.getElementById("q"+i+"O3").checked === false) {
                 qUnanswered++;
         }
+        // else if the correct answer is checked, increment qRight
         else if (document.getElementById("q"+i+"O"+quizQuestions[i].c).checked === true)  {
             qRight++;
         }
+        // else, increment qWrong
         else {
             qWrong++;
         };

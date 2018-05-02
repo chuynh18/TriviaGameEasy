@@ -4,20 +4,17 @@ html {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
     background-color: #eee;
+}
+
+html, body {
     height: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
 body {
-    height: 100%;
     display: flex;
     flex-direction: column;
 }
 
-body > * {
-    flex-shrink: 0;
-  }
 
 #quizHeader {
     font-size: 36pt;
@@ -41,6 +38,7 @@ body > * {
     padding: 80px 50px 50px;
     border-left: 1px dashed black;
     border-right: 1px dashed black;
+    flex: 1 0 auto;
 }
 
 #quizFooter {
@@ -49,7 +47,12 @@ body > * {
     padding: 80px 50px 50px;
     border-left: 1px dashed black;
     border-right: 1px dashed black;
-    flex-grow: 1;
+    border-bottom: 1px dashed black;
+    flex-shrink: 0;
 }
 
 strong {color: red;}
+
+.labelAnswer {
+    max-width: 100%;
+}
