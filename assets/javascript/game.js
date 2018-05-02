@@ -1,7 +1,5 @@
 "use strict";
 
-// 4 ez reference:  div IDs are:  quizHeader, quizBody, quizFooter
-
 // for scoring and timing the quiz
 var qRight = 0;
 var qWrong = 0;
@@ -75,7 +73,7 @@ var renderQuiz = function() {
         // build the html for the radio buttons
         for (var j = 0; j < quizOptions.length; j++) {
             // just wow, what is this... ugly... thing
-            var quizButton = $('<input type="radio" name="'+i+'" id="q'+i+'O'+j+'" value="'+j+'">'+quizOptions[j]+'<br>');
+            var quizButton = $('<input type="radio" name="'+i+'" id="q'+i+'O'+j+'" value="'+j+'">'+'<label for="q'+i+'O'+j+'">'+quizOptions[j]+'</label>'+'<br>');
             // append the radio button
             $("#quizBody").append(quizButton);
         };

@@ -6,6 +6,15 @@ html {
 
 #quizHeader {
     font-size: 36pt;
+    position: fixed;
+    margin: auto;
+    text-align: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background-color: #eee;
+    border-bottom: 3px solid black;
 }
 
 #quizBody {
@@ -13,4 +22,7 @@ html {
     margin: auto;
     text-align: left;
     font-size: 18pt;
+    padding: 100px 50px 0;
+    border-left: 1px dashed black;
+    border-right: 1px dashed black;
 }
