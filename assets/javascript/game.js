@@ -59,6 +59,7 @@ var renderQuiz = function() {
     // clear out the area where the quiz is to be inserted
     $("#quizBody").empty();
     // this allows us to randomize the order we present the questions in
+    // and it's horrible
     var randomizeArray = [];
     for (var i = 0; i < quizQuestions.length; i++) {
         while (randomizeArray.length < quizQuestions.length) {
@@ -80,6 +81,8 @@ var renderQuiz = function() {
         $("#quizBody").append(quizBlock);
 
         // allows us to randomize the order we present the options for each question
+        // this looks familiar... and horrible
+        // but not horrible enough for me to not do it again!  ha
         var randomizeArray2 = [];
             while (randomizeArray2.length < quizOptions.length) {
                 generateRandom(quizOptions.length);
