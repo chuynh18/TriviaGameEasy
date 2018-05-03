@@ -65,3 +65,14 @@ strong {color: red;}
 #u-r-wrong-lol {
     color: red;
 }
+
+.button {
+    color: white;
+    background-color: red;
+    padding: 15px 20px;
+    font-size: 16pt;
+    border-radius: 25%;
+    border-width: 3px;
+    border-style: solid;
+    border-color: blue;
+}

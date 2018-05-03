@@ -1,5 +1,7 @@
 "use strict";
 
+$(function() {
+
 // for scoring and timing the quiz
 var qRight = 0;
 var qWrong = 0;
@@ -46,6 +48,7 @@ var stopTimer = function() {
     quizStarted = false;
 };
 
+// used to generate random numbers, which I use to generate arrays, which I use to randomize the order of questions and multiple choice options
 var randomNum;
 var generateRandom = function(howMany) {
     randomNum = Math.floor(Math.random()*howMany);
@@ -64,7 +67,7 @@ var renderQuiz = function() {
                 randomizeArray.push(randomNum);
             };
         };
-        // pull data from our array of objects using the array we built
+        // pull data from our array of objects using the array we built and store them in temporary variables
         var quizQuestion = quizQuestions[randomizeArray[i]].q;
         var quizOptions = quizQuestions[randomizeArray[i]].a;
         
@@ -73,7 +76,7 @@ var renderQuiz = function() {
         quizBlock.attr("id", "question"+randomizeArray[i]);
         quizBlock.addClass("quizQuestion");
         quizBlock.html("<br><strong>" + quizQuestion + "</strong><br>");
-        // appending the question
+        // appending the question, but not the multiple choice options (yet)
         $("#quizBody").append(quizBlock);
 
         // allows us to randomize the order we present the options for each question
@@ -89,14 +92,14 @@ var renderQuiz = function() {
         for (var j = 0; j < quizOptions.length; j++) {
             // Just wow, what is this... ugly... thing.  There's gotta be a better way.
             var quizButton = $('<input type="radio" name="'+randomizeArray[i]+'" id="q'+randomizeArray[i]+'O'+randomizeArray2[j]+'" value="'+randomizeArray2[j]+'">'+'<label class="labelAnswer" for="q'+randomizeArray[i]+'O'+randomizeArray2[j]+'">'+quizOptions[randomizeArray2[j]]+'</label><br>');
-            // append the radio button
+            // append the radio button and associated text
             $("#quizBody").append(quizButton);
         };
         
         // always cite your sources for the nonbelievers
         $("#quizBody").append('<em>Source: <a href="'+quizQuestions[i].s+'" target="_blank">'+quizQuestions[i].s+'</a></em><br>');
     };
-    $("#quizBody").append("<br><button type='button' id='clickToScoreQuiz'>Click to score the quiz</button>");
+    $("#quizBody").append("<br><button class='button' type='button' id='clickToScoreQuiz'>Click to score the quiz</button>");
     $("#quizFooter").text("Even since the last time fights with you hereafter, my force has promoted two times.");
 };
 
@@ -104,11 +107,13 @@ var renderQuiz = function() {
 var renderWelcome = function () {
     timeLeft = timeAllowed + 1;
     $("#quizHeader").text("Backstroke of the West Quiz");
-    $("#quizBody").html("<center><button type='button' id='clickToStartQuiz'>Click to begin</button></center>");
+    $("#quizBody").html("<center><button class='button' type='button' id='clickToStartQuiz'>Click to begin</button></center>");
     $("#quizFooter").text("The wish power are together with you...");
 };
 
-// this builds the array of objects we'll use to give the user feedback regarding their incorrect quiz answers
+// this builds objects we'll use to give the user feedback regarding their incorrect quiz answers
+// we'll be pushing those newly-built objects into an array a little later on
+// ... only if the user gets questions wrong.  perfect scores mean this function won't see use, which will make it sad
 var QuizFeedback = function(question, userAnswer, correctAnswer, source) {
     this.q = question;
     this.uA = userAnswer;
@@ -157,6 +162,7 @@ var scoreQuiz = function() {
             else {
                 incorrectChoice = quizQuestions[i].a[3];
             };
+            // wow, an array of objects!  okay, technically that only happens if the user gets at least 2 questions wrong
             feedbackArray.push(new QuizFeedback(question, incorrectChoice, correctChoice, source));
         };
     };
@@ -178,7 +184,7 @@ var renderScoreScreen = function() {
     var timeSpent = timeAllowed - timeLeft;
     feedbackToHTML();
     $("#quizHeader").text("Quiz finished!  Your results...");
-    $("#quizBody").html("Questions unanswered: <strong>" + qUnanswered + "</strong><br>Questions correct: <strong id='correctQs'>" + qRight + "</strong><br>Questions incorrect: <strong>" + qWrong + "</strong><br>You took <strong>" + timeSpent+"</strong> seconds.<br><center><button type='button' id='clickToRestartQuiz'>Try again?</button></center>" + feedbackHTML);
+    $("#quizBody").html("Questions unanswered: <strong>" + qUnanswered + "</strong><br>Questions correct: <strong id='correctQs'>" + qRight + "</strong><br>Questions incorrect: <strong>" + qWrong + "</strong><br>You took <strong>" + timeSpent+"</strong> seconds.<br><center><button class='button' type='button' id='clickToRestartQuiz'>Try again?</button></center>" + feedbackHTML);
     $("#quizFooter").html("Should you choose to retake this quiz, the order of questions and multiple choice options <strong>will be randomized</strong>.");
     // scroll the window to the top so the user can see how well they did in this disaster of a quiz
     window.scrollTo(0,0);
@@ -202,4 +208,6 @@ $(document).on("click", "#clickToRestartQuiz", function() {
 
 // ---------------------------------------------------------------------------------
 
-renderWelcome();
+renderWelcome(); // if only this was all the code I had to write to finish the homework
+
+});
